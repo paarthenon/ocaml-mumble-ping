@@ -4,7 +4,7 @@ A simple program to ping mumble and display the output of the ping request.
 Typical output:
 
 
-	[paarth@Garth ocaml-mumble-ping]$ ./mping <mumble-domain>
+	[paarth@Garth ocaml-mumble-ping]$ ./mping <mumble-domain> <mumble-port>
 	00000000  00 00 00 00 7f ff ff ff  ff ff ff ff              |............    |
 	Got back message with length 24
 	00000000  00 01 02 04 7f ff ff ff  ff ff ff ff 00 00 00 0d  |................|

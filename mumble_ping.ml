@@ -1,4 +1,20 @@
-(* mumble ping *)
+(*
+	
+The glory of Mumble Ping
+
+This program sends a UDP message to a specified mumble server
+
+It is run as
+
+./mping <server-domain> <port-number>
+
+This project doesn't really need to be nearly this fancy. Once I got
+a barebones ping program running I wanted to see how I would make this
+work if I wanted to handle multiple message types. Those who just
+want a ping program, feel free to just get rid of all these type definitions
+and take action directly in the bitmatch statement. 
+
+*)
 
 (* Hoity Toity type definitions. Look mom, I'm a real programmer *)
 type mumble_sub_version = {
@@ -66,27 +82,33 @@ let get_addr url port =
 	Unix.ADDR_INET (addr, port)
 
 let () =
+	(* load command line args *)
 	let path = Sys.argv.(1) in
 	let port = int_of_string Sys.argv.(2) in
 
+	(* create the socket *)
 	let sock = udp_socket in
 
+	(* get the addr info *)
 	let addr = get_addr path port in
 
+	(* do work *)
 	let str = String.create 64 in
 	(
-		(* logging *)
+		(* dump the message we plan on sending *)
 		(Bitstring.hexdump_bitstring Pervasives.stdout ping_message);
 
 		(* send message *)
 		let req = Bitstring.string_of_bitstring ping_message in
 		ignore (Unix.sendto sock req 0 (String.length req) [] addr);
 
+		(* read response *)
 		let retlen, _ = (Unix.recvfrom sock str 0 64 []) in
 		(Printf.printf "Got back message with length %d\n" retlen);
 		let resp = Bitstring.bitstring_of_string str in
 		(Bitstring.hexdump_bitstring Pervasives.stdout resp);
 
+		(* parse response and then act on it *)
 		let message = parse_response resp in
 		(act_on_response message)
 	)
