@@ -1,0 +1,6 @@
+#!/bin/zsh
+ocamlfind ocamlc -package bitstring.syntax,bitstring -syntax camlp4o -g -linkpkg -o mping mumble_ping.ml
+
+
+
+
