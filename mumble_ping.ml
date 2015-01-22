@@ -1,7 +1,5 @@
 (* mumble ping *)
 
-open Unix;;
-
 (* Hoity Toity type definitions. Look mom, I'm a real programmer *)
 type mumble_sub_version = {
 	maj: int;
@@ -65,7 +63,7 @@ let udp_socket =
 
 let get_addr url port = 
 	let addr = (Unix.gethostbyname url).Unix.h_addr_list.(0) in
-	ADDR_INET (addr, port)
+	Unix.ADDR_INET (addr, port)
 
 let () =
 	let path = Sys.argv.(1) in
@@ -82,9 +80,9 @@ let () =
 
 		(* send message *)
 		let req = Bitstring.string_of_bitstring ping_message in
-		ignore (sendto sock req 0 (String.length req) [] addr);
+		ignore (Unix.sendto sock req 0 (String.length req) [] addr);
 
-		let retlen, _ = (recvfrom sock str 0 64 []) in
+		let retlen, _ = (Unix.recvfrom sock str 0 64 []) in
 		(Printf.printf "Got back message with length %d\n" retlen);
 		let resp = Bitstring.bitstring_of_string str in
 		(Bitstring.hexdump_bitstring Pervasives.stdout resp);
